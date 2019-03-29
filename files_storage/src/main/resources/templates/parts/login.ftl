@@ -1,9 +1,12 @@
 <#macro login path isRegisterForm>
 
-    <h4 class="text-center mt-3">
-        Введите логин и пароль
-    </h4>
+
     <form action="${path}" method="post">
+        <div class="form-group row">
+            <h4 class="text-center mt-3 mb-3">
+                Введите логин и пароль
+            </h4>
+        </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Пользователь:</label>
             <div class="col-sm-6">
@@ -31,12 +34,15 @@
 </#macro>
 
 <#macro register user isAdmin>
-    <h4 class="text-center mt-3">
-        <#if !isAdmin>Добавление пользователя
-        <#else>Редактирование данных пользователя
-        </#if>
-    </h4>
     <div class="form-group row">
+        <h4 class="text-center mt-3 mb-3">
+            <#if !isAdmin>Добавление пользователя
+            <#else>Редактирование данных пользователя
+            </#if>
+        </h4>
+    </div>
+    <div class="form-group row">
+
         <label class="col-sm-2 col-form-label">Пользователь:</label>
         <div class="col-sm-6">
             <label>
@@ -46,12 +52,13 @@
                         value="${user.username!}"
                         class="form-control ${(usernameError??)?string('is-invalid','')}"
                         placeholder="Имя пользователя"/>
+
+                <#if usernameError??>
+                    <div class="invalid-feedback">
+                        ${usernameError}
+                    </div>
+                </#if>
             </label>
-            <#if usernameError??>
-                <div class="invalid-feedback">
-                    ${usernameError}
-                </div>
-            </#if>
         </div>
     </div>
     <#if !isAdmin>
@@ -62,15 +69,14 @@
                     <input
                             type="password"
                             name="password"
-
                             class="form-control ${(passwordError??)?string('is-invalid','')}"
-                            placeholder="Пароль">
+                            placeholder="Пароль"/>
+                    <#if passwordError??>
+                        <div class="invalid-feedback">
+                            ${passwordError}
+                        </div>
+                    </#if>
                 </label>
-                <#if passwordError??>
-                    <div class="invalid-feedback">
-                        ${passwordError}
-                    </div>
-                </#if>
             </div>
         </div>
 
@@ -82,13 +88,13 @@
                             type="password"
                             name="password2"
                             class="form-control ${(password2Error??)?string('is-invalid','')}"
-                            placeholder="Пароль">
+                            placeholder="Пароль"/>
+                    <#if password2Error??>
+                        <div class="invalid-feedback">
+                            ${password2Error}
+                        </div>
+                    </#if>
                 </label>
-                <#if password2Error??>
-                    <div class="invalid-feedback">
-                        ${password2Error}
-                    </div>
-                </#if>
             </div>
         </div>
     </#if>
@@ -100,13 +106,13 @@
                         type="email" name="email"
                         value="${user.email!}"
                         class="form-control ${(emailError??)?string('is-invalid','')}"
-                        placeholder="email@example.com">
+                        placeholder="email@example.com"/>
+                <#if emailError??>
+                    <div class="invalid-feedback">
+                        ${emailError}
+                    </div>
+                </#if>
             </label>
-            <#if emailError??>
-                <div class="invalid-feedback">
-                    ${emailError}
-                </div>
-            </#if>
         </div>
     </div>
     <div class="form-group  row">
@@ -121,9 +127,9 @@
 
 
 
-<#macro logout>
+<#macro logout text>
     <form action="/logout" method="post">
-        <button type="submit" class="btn btn-primary">Выйти</button>
+        <button type="submit" class="btn btn-primary">${text}</button>
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
     </form>
 </#macro>

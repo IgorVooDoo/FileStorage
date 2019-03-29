@@ -164,7 +164,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    private boolean isActive() {
+    public boolean isActive() {
         return active;
     }
 

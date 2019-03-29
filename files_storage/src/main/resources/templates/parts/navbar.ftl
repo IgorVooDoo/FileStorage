@@ -18,7 +18,7 @@
                     <a class="nav-link" href="/analyst">Статистика</a>
                 </li>
             <#else>
-                <#if user?? >
+                <#if user?? && currentUserId!=-1>
                     <li class="nav-item">
                         <a class="nav-link" href="/accessReadOwner">Для просмотра</a>
                     </li>
@@ -33,7 +33,7 @@
         </ul>
         <div class="navbar-text mr-3">${name}</div>
         <#if user?? >
-            <@l.logout />
+            <@l.logout (currentUserId??)?string("Назад","Выход")/>
         </#if>
     </div>
 </nav>
