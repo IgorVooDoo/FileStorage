@@ -3,6 +3,11 @@
 
 
 <@c.page>
+    <#if message??>
+        <div class="alert alert-${messageType}" role="alert">
+            ${message}
+        </div>
+    </#if>
     <a class="btn btn-primary" data-toggle="collapse" href="#collapseAddFile" role="button" aria-expanded="false"
        aria-controls="collapseAddFile">
         Добавить файл

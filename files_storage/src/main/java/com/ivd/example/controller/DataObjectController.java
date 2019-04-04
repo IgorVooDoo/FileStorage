@@ -1,8 +1,9 @@
 package com.ivd.example.controller;
 
-import com.ivd.example.dao.DataObjectDao;
 import com.ivd.example.entity.DataObject;
 import com.ivd.example.entity.User;
+import com.ivd.example.service.DataObjectService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Контроллер приложения, получает и обрабатывает запросы пользователя
@@ -34,10 +34,10 @@ import java.util.UUID;
 public class DataObjectController {
 
     private final Logger LOG = LoggerFactory.getLogger(DataObjectController.class);
-    private final DataObjectDao dataObjectDao;
+    private final DataObjectService dataObjectService;
 
-    public DataObjectController(DataObjectDao dataObjectDao) {
-        this.dataObjectDao = dataObjectDao;
+    public DataObjectController(DataObjectService dataObjectService) {
+        this.dataObjectService = dataObjectService;
     }
 
     @Value("${upload.path}")
@@ -58,30 +58,19 @@ public class DataObjectController {
             @RequestParam String name,
             @RequestParam("file") MultipartFile file,
             Map<String, Object> model) throws IOException {
-        LOG.info("Зашли в добавление пользователя");
-        DataObject dataObject = new DataObject();
         if (file != null) {
-            File uploadDir = new File("D:" + uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+            if (StringUtils.isEmpty(name)) {
+                name = Objects.requireNonNull(file).getOriginalFilename();
             }
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + file.getOriginalFilename();
-            file.transferTo(new File("D:" + uploadPath + "/" + resultFileName));
-            dataObject.setUuidName(resultFileName);
-        }
-        if (name == null || name.trim().equals("")) {
-            dataObject.setName(Objects.requireNonNull(file).getOriginalFilename());
+            dataObjectService.addData(user, file, name);
+            model.put("message", "Файл успешно добавлен");
+            model.put("messageType", "success");
         } else {
-            dataObject.setName(name);
+            model.put("message", "Не указан файл");
+            model.put("messageType", "danger");
         }
-        dataObject.setAuthor(user);
-        dataObject.setContentType(Objects.requireNonNull(file).getContentType());
-        dataObject.setAccessCount(0);
-        dataObjectDao.save(dataObject);
-        Iterable<DataObject> messages = dataObjectDao.findByAuthor(user);
-        model.put("messages", messages);
-        return "home";
+        model.put("messages", dataObjectService.findByAuthor(user));
+        return "redirect:/home";
     }
 
     /**
@@ -98,11 +87,9 @@ public class DataObjectController {
             @PathVariable DataObject message,
             Map<String, Object> model
     ) {
-        File file = new File("D:" + uploadPath + "/" + message.getUuidName());
-        file.delete();
-        dataObjectDao.deleteById(message.getId());
-        Iterable<DataObject> messages = dataObjectDao.findByAuthor(user);
-        model.put("messages", messages);
+        dataObjectService.deleteDataById(message);
+
+        model.put("messages", dataObjectService.findByAuthor(user));
         return "redirect:/home";
     }
 
@@ -111,32 +98,39 @@ public class DataObjectController {
      *
      * @param message Файл
      * @return ResponseEntity
-     * @throws IOException Исключение
      */
     @GetMapping("/download/{message}")
     public ResponseEntity downloadMessage(
             @PathVariable DataObject message
-    ) throws IOException {
+    ) {
+        addAccessCount(message);
+
+        File file = new File(uploadPath + "/" + message.getUuidName());
+        String mimeType = message.getContentType();
+        if (StringUtils.isEmpty(mimeType)) {
+            mimeType = "application/octet-stream";
+        }
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            LOG.info("new FileInputStream(file) -> ");
+            InputStreamResource resource = new InputStreamResource(fileInputStream);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + message.getName())
+                    .contentLength(file.length())
+                    .contentType(MediaType.parseMediaType(mimeType))
+                    .body(resource);
+        } catch (IOException ex) {
+            LOG.info("FileNotFoundException -> " + ex.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    private void addAccessCount(DataObject message) {
         if (message.getAccessCount() == null) {
             message.setAccessCount(1);
         } else {
             message.setAccessCount(message.getAccessCount() + 1);
         }
-        dataObjectDao.save(message);
-        File file = new File("D:" + uploadPath + "/" + message.getUuidName());
-
-        String mimeType = message.getContentType();
-
-        if ("".equals(mimeType)) {
-            mimeType = "application/octet-stream";
-        }
-        InputStreamResource resource =
-                new InputStreamResource(new FileInputStream(file));
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + message.getName())
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType(mimeType))
-                .body(resource);
+        dataObjectService.saveData(message);
     }
 }

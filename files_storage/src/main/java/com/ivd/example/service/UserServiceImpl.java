@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public void delUser(User user) {
+    public void deleteUser(User user) {
         if (user != null) {
             userDao.deleteById(user.getId());
         } else {

@@ -2,7 +2,9 @@ package com.ivd.example.service;
 
 import com.ivd.example.entity.DataObject;
 import com.ivd.example.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,4 +25,28 @@ public interface DataObjectService {
      * @return Long
      */
     Long messageCount();
+
+    /**
+     * Добавление файла в базу
+     *
+     * @param user Пользователь
+     * @param file Файл
+     * @param name Имя файла
+     * @throws IOException Исключение
+     */
+    void addData(User user, MultipartFile file, String name) throws IOException;
+
+    /**
+     * Сохранение изменений в файле
+     *
+     * @param message Файл
+     */
+    void saveData(DataObject message);
+
+    /**
+     * Удаление файла по идентификатору
+     *
+     * @param message Файл
+     */
+    void deleteDataById(DataObject message);
 }

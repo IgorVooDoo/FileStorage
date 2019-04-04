@@ -39,7 +39,7 @@ public interface UserService extends UserDetailsService {
      *
      * @param user Пользователь
      */
-    void delUser(User user);
+    void deleteUser(User user);
 
     /**
      * Возвращает список пользователей
