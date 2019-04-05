@@ -10,7 +10,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Контроллер для навигации
@@ -48,8 +51,12 @@ public class MainController {
     public String home(
             @AuthenticationPrincipal User user,
             Map<String, Object> model) {
-        Iterable<DataObject> messages = dataObjectService.findByAuthor(user);
-        model.put("messages", messages);
+        List<DataObject> messages =
+                dataObjectService.findByAuthor(user);
+        List<DataObject> sortMessage =
+        messages.stream().sorted(Comparator.comparing(DataObject::getName)).collect(Collectors.toList());
+
+        model.put("messages", sortMessage);
         return "home";
     }
 

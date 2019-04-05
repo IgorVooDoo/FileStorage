@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +29,7 @@ import java.util.Objects;
  * Контроллер приложения, получает и обрабатывает запросы пользователя
  */
 @Controller
-@Transactional
+
 public class DataObjectController {
 
     private final Logger LOG = LoggerFactory.getLogger(DataObjectController.class);
@@ -102,27 +101,23 @@ public class DataObjectController {
     @GetMapping("/download/{message}")
     public ResponseEntity downloadMessage(
             @PathVariable DataObject message
-    ) {
+    ) throws IOException {
         addAccessCount(message);
 
         File file = new File(uploadPath + "/" + message.getUuidName());
+
         String mimeType = message.getContentType();
         if (StringUtils.isEmpty(mimeType)) {
             mimeType = "application/octet-stream";
         }
-        try {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            LOG.info("new FileInputStream(file) -> ");
-            InputStreamResource resource = new InputStreamResource(fileInputStream);
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + message.getName())
-                    .contentLength(file.length())
-                    .contentType(MediaType.parseMediaType(mimeType))
-                    .body(resource);
-        } catch (IOException ex) {
-            LOG.info("FileNotFoundException -> " + ex.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + message.getName())
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType(mimeType))
+                .body(resource);
     }
 
     private void addAccessCount(DataObject message) {
