@@ -59,10 +59,11 @@ public class DataObjectServiceImpl implements DataObjectService {
     @Override
     public void addData(User user, MultipartFile file, String name) throws IOException {
         String resultName = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
+        String originalFilename = Objects.requireNonNull(file).getOriginalFilename();
         if (StringUtils.isEmpty(name)) {
-            name = Objects.requireNonNull(file).getOriginalFilename();
+            name = originalFilename;
         } else {
-            name = name + getFileExtension(file.getOriginalFilename());
+            name = name + getFileExtension(originalFilename);
         }
         file.transferTo(new File(getUploadPath(resultName)));
 
@@ -142,7 +143,7 @@ public class DataObjectServiceImpl implements DataObjectService {
 
         int lastIndexOf = name.lastIndexOf(".");
         if (lastIndexOf == -1) {
-            return ""; // empty extension
+            return "";
         }
         return name.substring(lastIndexOf);
     }
