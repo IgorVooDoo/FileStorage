@@ -2,7 +2,6 @@ package com.ivd.example.service;
 
 import com.ivd.example.entity.DataObject;
 import com.ivd.example.entity.User;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -52,10 +51,9 @@ public interface DataObjectService {
     void deleteDataById(DataObject message);
 
     /**
-     * Скачивание файла
+     * Увеличение счетчика скачиваний
      *
      * @param message Файл
-     * @return
      */
-    ResponseEntity downloadData(DataObject message);
+    void addAccessCount(DataObject message);
 }

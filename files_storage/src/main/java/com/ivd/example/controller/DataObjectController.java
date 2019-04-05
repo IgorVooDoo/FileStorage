@@ -3,10 +3,10 @@ package com.ivd.example.controller;
 import com.ivd.example.entity.DataObject;
 import com.ivd.example.entity.User;
 import com.ivd.example.service.DataObjectService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 /**
@@ -59,7 +66,7 @@ public class DataObjectController {
             model.put("messageType", "danger");
         }
         model.put("messages", dataObjectService.findByAuthor(user));
-        return "redirect:/home";
+        return "home";
     }
 
     /**
@@ -86,12 +93,32 @@ public class DataObjectController {
      * Скачивание файла
      *
      * @param message Файл
-     * @return ResponseEntity
      */
     @GetMapping("/download/{message}")
-    public ResponseEntity downloadMessage(
-            @PathVariable DataObject message
+    public void downloadMessage(
+            @PathVariable DataObject message,
+            HttpServletResponse response
     ) {
-        return dataObjectService.downloadData(message);
+        File file = new File(uploadPath + "/" + message.getUuidName());
+
+        String mimeType = message.getContentType();
+        if (StringUtils.isEmpty(mimeType)) {
+            mimeType = "application/octet-stream";
+        }
+
+        try (InputStream fis = new BufferedInputStream(new FileInputStream(file));
+             OutputStream toClient = new BufferedOutputStream(response.getOutputStream())) {
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            response.reset();
+            response.addHeader("Content-Disposition", "attachment;filename=" + message.getName());
+            response.addHeader("Content-Length", "" + file.length());
+            response.setContentType(mimeType);
+            toClient.write(buffer);
+            toClient.flush();
+            dataObjectService.addAccessCount(message);
+        } catch (IOException ex) {
+            LOG.info("downloadMessage IOException -> " + ex.getMessage());
+        }
     }
 }
