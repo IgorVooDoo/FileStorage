@@ -3,13 +3,9 @@ package com.ivd.example.controller;
 import com.ivd.example.entity.DataObject;
 import com.ivd.example.entity.User;
 import com.ivd.example.service.DataObjectService;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,17 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Контроллер приложения, получает и обрабатывает запросы пользователя
  */
 @Controller
-
 public class DataObjectController {
 
     private final Logger LOG = LoggerFactory.getLogger(DataObjectController.class);
@@ -58,9 +50,7 @@ public class DataObjectController {
             @RequestParam("file") MultipartFile file,
             Map<String, Object> model) throws IOException {
         if (file != null) {
-            if (StringUtils.isEmpty(name)) {
-                name = Objects.requireNonNull(file).getOriginalFilename();
-            }
+
             dataObjectService.addData(user, file, name);
             model.put("message", "Файл успешно добавлен");
             model.put("messageType", "success");
@@ -101,31 +91,7 @@ public class DataObjectController {
     @GetMapping("/download/{message}")
     public ResponseEntity downloadMessage(
             @PathVariable DataObject message
-    ) throws IOException {
-        addAccessCount(message);
-
-        File file = new File(uploadPath + "/" + message.getUuidName());
-
-        String mimeType = message.getContentType();
-        if (StringUtils.isEmpty(mimeType)) {
-            mimeType = "application/octet-stream";
-        }
-
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + message.getName())
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType(mimeType))
-                .body(resource);
-    }
-
-    private void addAccessCount(DataObject message) {
-        if (message.getAccessCount() == null) {
-            message.setAccessCount(1);
-        } else {
-            message.setAccessCount(message.getAccessCount() + 1);
-        }
-        dataObjectService.saveData(message);
+    ) {
+        return dataObjectService.downloadData(message);
     }
 }
