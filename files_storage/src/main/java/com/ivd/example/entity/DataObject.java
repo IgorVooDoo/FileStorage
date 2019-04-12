@@ -63,7 +63,7 @@ public class DataObject {
     }
 
     public String getAuthorName() {
-        return author != null ? author.getUsername() : "<none>";
+        return author.getUsername();
     }
 
     public User getAuthor() {
