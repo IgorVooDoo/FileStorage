@@ -80,7 +80,7 @@ public class DataObjectController {
     @GetMapping("/del/{message}")
     public String deleteMessage(
             @AuthenticationPrincipal User user,
-            @PathVariable DataObject message,
+            @PathVariable("message") DataObject message,
             Map<String, Object> model
     ) {
         dataObjectService.deleteDataById(message);

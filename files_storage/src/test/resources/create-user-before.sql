@@ -33,4 +33,9 @@ insert into  access(member_id,user_id,is_query,type_access) values
 (8,1,true,0),
 (9,1,true,1);
 
+insert into data_object(id,access_count,data_name,uuid_name,user_id) values
+(10,0,'file','file-test',1),
+(11,0,'file1','file-test1',1);
+
+
 alter sequence hibernate_sequence restart with 100;
