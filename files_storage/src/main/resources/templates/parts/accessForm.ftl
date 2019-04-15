@@ -3,12 +3,10 @@
     <div class="accordion " id="accordionExample">
         <#list listUsers as item>
             <div class="card">
-                <div class="card-header" id="${item.id}">
+                <div class="card-header" id="idOwner${item.id}">
                     <h2 class="mb-0">
                         <button class="btn btn-link  collapsed" type="button" data-toggle="collapse"
-                                data-target="#${item.username}" aria-controls="${item.username}">
-                            ${item.username} ( ${item.dataObjects?size} )
-                        </button>
+                                data-target="#${item.username}" aria-controls="${item.username}">${item.username} ( ${item.dataObjects?size} )</button>
                     </h2>
                 </div>
 

@@ -48,6 +48,65 @@ public class MainControllerTest {
     }
 
     /**
+     * Страница с пользователями предоставившими доступ на чтение
+     *
+     * @throws Exception Исключение
+     */
+    @Test
+    public void showAccessReadOwnerTest() throws Exception {
+        this.mockMvc.perform(get("/accessReadOwner"))
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(xpath("//div[@id='idOwner3']/h2/button").string("userRead ( 0 )"));
+    }
+
+    /**
+     * Страница с пользователями предоставившими доступ на скачивание
+     *
+     * @throws Exception Исключение
+     */
+    @Test
+    public void showAccessLoadOwnerTest() throws Exception {
+        this.mockMvc.perform(get("/accessLoadOwner"))
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(xpath("//div[@id='idOwner4']/h2/button").string("userLoad ( 0 )"));
+    }
+
+    /**
+     * Страница с пользователями кому предоставлен доступ или находится в ожидании
+     *
+     * @throws Exception Исключение
+     */
+    @Test
+    public void showAccessMemberTest() throws Exception {
+        this.mockMvc.perform(get("/accessMember"))
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(
+                        xpath("//*[@id='readAccess']/div/form/table/tbody/tr/th[1]/label").string("memberRead")
+                )
+                .andExpect(
+                        xpath("//*[@id='loadAccess']/div/form/table/tbody/tr/th[1]/label").string("memberLoad")
+                );
+    }
+
+    /**
+     * Страница пользователя с ролью Аналитик
+     *
+     * @throws Exception Исключение
+     */
+    @Test
+    @WithUserDetails("analyst")
+    public void showFormAnalyst() throws Exception {
+        this.mockMvc.perform(get("/analyst"))
+                .andDo(print())
+                .andExpect(authenticated())
+                .andExpect(xpath("//*[@id=\"inputCount\"]").exists())
+                .andExpect(xpath("//*[@id=\"idOwner1\"]/h2/button").string("user ( 0 )"));
+    }
+
+    /**
      * Добавление файла
      *
      * @throws Exception Исключение
@@ -62,7 +121,7 @@ public class MainControllerTest {
                 .andDo(print())
                 .andExpect(authenticated())
                 .andExpect(xpath("/html/body/div/table/tbody/tr").nodeCount(1))
-                .andExpect(xpath("/html/body/div/table/tbody/tr[@id=10]").exists())
-        ;
+                .andExpect(xpath("/html/body/div/table/tbody/tr[@id=100]").exists());
     }
+
 }

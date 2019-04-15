@@ -7,7 +7,7 @@
         <label class="col-sm-4 col-form-label">Количество пользователей : </label>
         <div class="col-sm-4">
             <label>
-                <input type="text" name="usersCount" value="${usersCount}" class="form-control" disabled/>
+                <input id="inputCount" type="text" name="usersCount" value="${usersCount}" class="form-control" disabled="true"/>
             </label>
         </div>
     </div>
@@ -16,7 +16,7 @@
         <label class="col-sm-4 col-form-label">Количество сообщений : </label>
         <div class="col-sm-4">
             <label>
-                <input type="text" name="messagesCount" value="${messagesCount}" disabled class="form-control">
+                <input id="messagesCount" type="text" name="messagesCount" value="${messagesCount}" disabled="true" class="form-control"/>
             </label>
         </div>
     </div>

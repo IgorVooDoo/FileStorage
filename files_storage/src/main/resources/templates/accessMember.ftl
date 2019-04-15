@@ -17,7 +17,7 @@
             <div class="collapse multi-collapse" id="collapse1">
                 <div class="form-group">
                     <form name="addMembers" method="post">
-                        <input type="hidden" value="${_csrf.token}" name="_csrf">
+                        <input type="hidden" value="${_csrf.token}" name="_csrf"/>
                         <div class="row ml-1 mb-3 col-sm-15">
                             <label>
                                 <select name="mem" class="custom-select">
@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <form name="queryMembers" method="post">
                         <#--noinspection FtlReferencesInspection-->
-                        <input type="hidden" value="${_csrf.token}" name="_csrf">
+                        <input type="hidden" value="${_csrf.token}" name="_csrf"/>
                         <div class="row ml-1 mb-3 col-sm-15">
                             <label>
                                 <select name="mem" class="custom-select">
