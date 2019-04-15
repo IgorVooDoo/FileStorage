@@ -1,7 +1,5 @@
 package com.ivd.example;
 
-import com.ivd.example.dao.DataObjectDao;
-import com.ivd.example.dao.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class DataObjectControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private DataObjectDao dataObjectDao;
-    @Autowired
-    private UserDao userDao;
 
     /**
      * Добавление файла

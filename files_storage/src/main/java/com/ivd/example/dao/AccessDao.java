@@ -27,7 +27,7 @@ public interface AccessDao extends CrudRepository<Access, AccessKey> {
     void deleteByUserAndMember(@Param("user") User user, @Param("member") User member);
 
     /**
-     * Список пользователей которые предоставели участнику доступ
+     * Список пользователей которые предоставили участнику доступ
      *
      * @param user Участник
      * @param type Тип доступа
