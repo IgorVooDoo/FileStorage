@@ -1,6 +1,5 @@
 package com.ivd.example;
 
-import com.ivd.example.controller.MainController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LoginTest {
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private MainController controller;
 
     /**
      * Проверка работы сервиса, если пользователь не авторизован
      *
-     * @throws Exception
+     * @throws Exception Исключение
      */
     @Test
     public void loginTest() throws Exception {
@@ -44,7 +41,7 @@ public class LoginTest {
     /**
      * Успешная авторизация
      *
-     * @throws Exception
+     * @throws Exception Исключение
      */
     @Test
     @Sql(value = {"/create-user-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -59,7 +56,7 @@ public class LoginTest {
     /**
      * не успешная авторизация
      *
-     * @throws Exception
+     * @throws Exception Исключение
      */
     @Test
     public void badCredentials() throws Exception {

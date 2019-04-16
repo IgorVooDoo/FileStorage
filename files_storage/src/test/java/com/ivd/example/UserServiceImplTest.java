@@ -1,8 +1,10 @@
-package com.ivd.example.service;
+package com.ivd.example;
 
 import com.ivd.example.dao.UserDao;
 import com.ivd.example.entity.Role;
 import com.ivd.example.entity.User;
+import com.ivd.example.service.CodeActivationSender;
+import com.ivd.example.service.UserService;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,6 +31,9 @@ public class UserServiceImplTest {
     @MockBean
     private CodeActivationSender codeActivationSender;
 
+    /**
+     * Добавление пользователя
+     */
     @Test
     public void addUser() {
         User user = new User();
@@ -39,6 +44,9 @@ public class UserServiceImplTest {
         Mockito.verify(userDao, Mockito.times(1)).save(user);
     }
 
+    /**
+     * Удаление пользователя
+     */
     @Test
     public void deleteUser() {
         User user = new User();
@@ -53,6 +61,9 @@ public class UserServiceImplTest {
         Assert.assertNull(userDao.findByUsername("Smith"));
     }
 
+    /**
+     * Активация пользователя
+     */
     @Test
     public void activateUser() {
         User user = new User();
@@ -67,6 +78,9 @@ public class UserServiceImplTest {
         Mockito.verify(userDao, Mockito.times(1)).save(user);
     }
 
+    /**
+     * Поиск пользователя по имени
+     */
     @Test
     public void loadUserByUsername() {
         User user = new User();
