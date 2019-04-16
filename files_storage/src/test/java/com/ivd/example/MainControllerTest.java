@@ -1,6 +1,5 @@
 package com.ivd.example;
 
-import com.ivd.example.controller.MainController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +19,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithUserDetails("user")
+@WithUserDetails
 @TestPropertySource("/application-test.properties")
 @Sql(value = {"/create-user-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/create-user-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class MainControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private MainController controller;
 
     /**
      * Переход на домашнюю страницу
@@ -41,7 +38,7 @@ public class MainControllerTest {
                 .andDo(print())
                 .andExpect(authenticated())
                 .andExpect(xpath("//div[@id='navbarSupportedContent']/div").string("user"))
-                .andExpect(xpath("/html/body/div/table/tbody/tr").nodeCount(0));
+                .andExpect(xpath("/html/body/div/table/tbody/tr").nodeCount(2));
     }
 
     /**
@@ -100,6 +97,6 @@ public class MainControllerTest {
                 .andDo(print())
                 .andExpect(authenticated())
                 .andExpect(xpath("//*[@id=\"inputCount\"]").exists())
-                .andExpect(xpath("//*[@id=\"idOwner1\"]/h2/button").string("user ( 0 )"));
+                .andExpect(xpath("//*[@id=\"idOwner1\"]/h2/button").string("user ( 2 )"));
     }
 }

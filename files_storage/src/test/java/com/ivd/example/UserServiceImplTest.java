@@ -31,6 +31,9 @@ public class UserServiceImplTest {
     @MockBean
     private CodeActivationSender codeActivationSender;
 
+    /**
+     * Добавление пользователя
+     */
     @Test
     public void addUser() {
         User user = new User();
@@ -41,6 +44,9 @@ public class UserServiceImplTest {
         Mockito.verify(userDao, Mockito.times(1)).save(user);
     }
 
+    /**
+     * Удаление пользователя
+     */
     @Test
     public void deleteUser() {
         User user = new User();
@@ -55,6 +61,9 @@ public class UserServiceImplTest {
         Assert.assertNull(userDao.findByUsername("Smith"));
     }
 
+    /**
+     * Активация пользователя
+     */
     @Test
     public void activateUser() {
         User user = new User();
@@ -69,6 +78,9 @@ public class UserServiceImplTest {
         Mockito.verify(userDao, Mockito.times(1)).save(user);
     }
 
+    /**
+     * Поиск пользователя по имени
+     */
     @Test
     public void loadUserByUsername() {
         User user = new User();
