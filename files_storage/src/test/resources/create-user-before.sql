@@ -12,7 +12,9 @@ insert into usr(id,active,password,username) values
 (6,true,'$2a$08$SV9uTNpYj7v5Pi90jrhVjO.DMjWP79Ppbwg7oNOGDaT84Zhdjy7Ue','memberRead'),
 (7,true,'$2a$08$SV9uTNpYj7v5Pi90jrhVjO.DMjWP79Ppbwg7oNOGDaT84Zhdjy7Ue','memberLoad'),
 (8,true,'$2a$08$SV9uTNpYj7v5Pi90jrhVjO.DMjWP79Ppbwg7oNOGDaT84Zhdjy7Ue','memberQueryRead'),
-(9,true,'$2a$08$SV9uTNpYj7v5Pi90jrhVjO.DMjWP79Ppbwg7oNOGDaT84Zhdjy7Ue','memberQueryLoad');
+(9,true,'$2a$08$SV9uTNpYj7v5Pi90jrhVjO.DMjWP79Ppbwg7oNOGDaT84Zhdjy7Ue','memberQueryLoad'),
+(12,true,'$2a$08$SV9uTNpYj7v5Pi90jrhVjO.DMjWP79Ppbwg7oNOGDaT84Zhdjy7Ue','memberTestRead'),
+(13,true,'$2a$08$SV9uTNpYj7v5Pi90jrhVjO.DMjWP79Ppbwg7oNOGDaT84Zhdjy7Ue','memberTestLoad');
 
 insert into user_role(user_id, roles) VALUES
 (1,'USER'),
