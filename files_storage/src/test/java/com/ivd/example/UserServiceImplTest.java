@@ -1,8 +1,10 @@
-package com.ivd.example.service;
+package com.ivd.example;
 
 import com.ivd.example.dao.UserDao;
 import com.ivd.example.entity.Role;
 import com.ivd.example.entity.User;
+import com.ivd.example.service.CodeActivationSender;
+import com.ivd.example.service.UserService;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
