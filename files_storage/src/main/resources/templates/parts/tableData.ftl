@@ -1,4 +1,6 @@
 <#macro table messages isAdmin isLoad>
+
+
     <table class="table table-striped">
         <thead class="thead-light">
         <tr>
@@ -13,6 +15,7 @@
             </#if>
         </tr>
         </thead>
+
         <tbody>
         <#list messages as message>
             <tr id="${message.id}">
@@ -23,10 +26,17 @@
                     <th><a href="/download/${message.id}">Скачать</a></th>
                 </#if>
                 <#if isAdmin>
-                    <th><a href="/del/${message.id}">Удалить</a></th>
+
+                    <th>
+                        <button onclick="deleteData(${message.id})">Удалить</button>
+
+                    </th>
                 </#if>
             </tr>
         </#list>
         </tbody>
+
     </table>
+    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+
 </#macro>

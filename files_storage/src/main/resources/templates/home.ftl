@@ -3,7 +3,7 @@
 
 
 <@c.page>
-    <#if message??>
+    <#if message?? && messageType??>
         <div class="alert alert-${messageType}" role="alert">
             ${message}
         </div>
@@ -39,9 +39,7 @@
     <hr/>
 
     <h4 class="text-center mt-3">Список загруженных файлов</h4>
-    <@t.table messages true true/>
-
-
+        <@t.table messages true true/>
     <hr/>
 
 </@c.page>

@@ -54,7 +54,7 @@ public class MainController {
         List<DataObject> messages =
                 dataObjectService.findByAuthor(user);
         List<DataObject> sortMessage =
-        messages.stream().sorted(Comparator.comparing(DataObject::getName)).collect(Collectors.toList());
+                messages.stream().sorted(Comparator.comparing(DataObject::getName)).collect(Collectors.toList());
 
         model.put("messages", sortMessage);
         return "home";

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,21 +73,18 @@ public class DataObjectController {
     /**
      * Удаление файла
      *
-     * @param user    Пользователь
      * @param message Файл
-     * @param model   Возвращаемые объекты
      * @return "redirect:/home"
      */
-    @GetMapping("/del/{message}")
+    @DeleteMapping("/del/{message}")
     public String deleteMessage(
             @AuthenticationPrincipal User user,
             @PathVariable("message") DataObject message,
             Map<String, Object> model
     ) {
         dataObjectService.deleteDataById(message);
-
         model.put("messages", dataObjectService.findByAuthor(user));
-        return "redirect:/home";
+        return "home";
     }
 
     /**
