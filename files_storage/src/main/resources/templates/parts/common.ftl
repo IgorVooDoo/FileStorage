@@ -36,11 +36,14 @@
             fetch('/del/' + message, {
                 method: 'DELETE',
                 credentials: 'include',
+
                 headers: {
                     'X-CSRF-TOKEN': token
                 }
             });
+
             location.reload();
+
         }
     </script>
     </body>

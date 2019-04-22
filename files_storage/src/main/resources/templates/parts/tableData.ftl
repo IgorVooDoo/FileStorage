@@ -1,6 +1,6 @@
 <#macro table messages isAdmin isLoad>
 
-
+<form>
     <table class="table table-striped">
         <thead class="thead-light">
         <tr>
@@ -26,10 +26,8 @@
                     <th><a href="/download/${message.id}">Скачать</a></th>
                 </#if>
                 <#if isAdmin>
-
                     <th>
-                        <button onclick="deleteData(${message.id})">Удалить</button>
-
+                        <button type="submit" class="btn btn-primary" onclick="deleteData(${message.id})">Удалить</button>
                     </th>
                 </#if>
             </tr>
@@ -38,5 +36,6 @@
 
     </table>
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+</form>
 
 </#macro>
